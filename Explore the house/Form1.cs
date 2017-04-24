@@ -12,9 +12,50 @@ namespace Explore_the_house
 {
     public partial class Form1 : Form
     {
+        Location currentLocation;
+
+        RoomWithDoor livingRoom;
+        Room diningRoom;
+        RoomWithDoor kitchen;
+
+        OutsideWithDoor frontYard;
+        OutsideWithDoor backYard;
+        Outside garden;
+
         public Form1()
         {
             InitializeComponent();
+            CreateObjects();
+            MoveToANewLocation(livingRoom);
+        }
+
+        private void CreateObjects()
+        {
+            livingRoom = new RoomWithDoor("Salon", "antyczny dywan", "dębowe drzwi z mosiężną klamką");
+            diningRoom = new Room("Jadalnia", "kryształowy żyrandol");
+            kitchen = new RoomWithDoor("Kuchnia", "nierdzewne stalowe sztućce", "rozsuwane drzwi");
+
+            frontYard = new OutsideWithDoor("Podwórko przed domem", false, "dębowe drzwi z mosiężną klamką");
+            backYard = new OutsideWithDoor("Podwórko za domem", true, "rozsuwane drzwi");
+            garden = new Outside("Ogród", false);
+
+            diningRoom.Exits = new Location[] { livingRoom, kitchen };
+            livingRoom.Exits = new Location[] { diningRoom };
+            kitchen.Exits = new Location[] { diningRoom };
+            frontYard.Exits = new Location[] { backYard, garden };
+            backYard.Exits = new Location[] { frontYard, garden };
+            garden.Exits = new Location[] { backYard, frontYard };
+
+            livingRoom.DoorLocation = frontYard;
+            frontYard.DoorLocation = livingRoom;
+
+            kitchen.DoorLocation = backYard;
+            backYard.DoorLocation = kitchen;
+        }
+
+        private void MoveToANewLocation(Location newLocation)
+        {
+
         }
     }
 }
